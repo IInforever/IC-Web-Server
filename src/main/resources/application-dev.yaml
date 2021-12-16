@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: passwd
+    url: jdbc:mariadb://localhost:3306/icb
+
+jwt:
+  issuer: "i1nfo"
+  public-key-path: ecc-public-key.pem
+  private-key-path: ecc-private-key.pem
+  expires-time: 1800
+  update-time: 900
