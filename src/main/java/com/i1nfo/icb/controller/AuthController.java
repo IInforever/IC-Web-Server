@@ -1,9 +1,14 @@
+/*
+ * Copyright (c)  IInfo 2021.
+ */
+
 package com.i1nfo.icb.controller;
 
-import com.i1nfo.icb.component.JWTUtils;
 import com.i1nfo.icb.model.User;
-import com.i1nfo.icb.service.LoginService;
+import com.i1nfo.icb.service.UserService;
+import com.i1nfo.icb.utils.JWTUtils;
 import com.i1nfo.icb.validate.UserLogin;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,23 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
-@RequestMapping("/api/auth")
-public class LoginController {
+@RequestMapping("/api")
+public class AuthController {
 
-    private final LoginService loginService;
+    private final UserService userService;
 
     private final JWTUtils jwt;
 
     @Autowired
-    public LoginController(LoginService loginService, JWTUtils jwt) {
-        this.loginService = loginService;
+    public AuthController(UserService userService, JWTUtils jwt) {
+        this.userService = userService;
         this.jwt = jwt;
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody @Validated(UserLogin.class) User user) throws NoSuchAlgorithmException {
-        Long id = loginService.getIdByNameAndPass(user.getName(), user.getPasswd());
+    public ResponseEntity<Object> login(@RequestBody @Validated(UserLogin.class) @NotNull User user) throws NoSuchAlgorithmException {
+        Long id = userService.getIdByNameAndPass(user.getName(), user.getPasswd());
         if (id == 0)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().header("Authorization", jwt.createToken(String.valueOf(id))).build();

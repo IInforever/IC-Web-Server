@@ -1,4 +1,8 @@
-package com.i1nfo.icb.component;
+/*
+ * Copyright (c)  IInfo 2021.
+ */
+
+package com.i1nfo.icb.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -7,7 +11,6 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.i1nfo.icb.config.JWTConfig;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +20,6 @@ import java.security.interfaces.ECPublicKey;
 import java.util.Date;
 
 @Component
-@Slf4j
 public class JWTUtils {
 
     JWTConfig jwtConfig;
@@ -33,9 +35,9 @@ public class JWTUtils {
         // Use JWS ES256
         algorithmEC = Algorithm.ECDSA256(publicKey, privateKey);
         // Create JWT verifier
-        verifier = JWT.require(algorithmEC).
-                withIssuer(jwtConfig.getIssuer()).
-                build();
+        verifier = JWT.require(algorithmEC)
+                .withIssuer(jwtConfig.getIssuer())
+                .build();
     }
 
 
@@ -47,12 +49,12 @@ public class JWTUtils {
     }
 
     public String createToken(String subject, Date expiresAt) throws JWTCreationException {
-        return JWT.create().
-                withSubject(subject).
-                withIssuer(jwtConfig.getIssuer()).
-                withExpiresAt(expiresAt).
-                withIssuedAt(new Date(System.currentTimeMillis())).
-                sign(algorithmEC);
+        return JWT.create()
+                .withSubject(subject)
+                .withIssuer(jwtConfig.getIssuer())
+                .withExpiresAt(expiresAt)
+                .withIssuedAt(new Date(System.currentTimeMillis()))
+                .sign(algorithmEC);
     }
 
     /**

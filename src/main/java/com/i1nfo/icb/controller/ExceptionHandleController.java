@@ -1,10 +1,16 @@
+/*
+ * Copyright (c)  IInfo 2021.
+ */
+
 package com.i1nfo.icb.controller;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.i1nfo.icb.exception.UnauthorizedException;
 import com.i1nfo.icb.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -34,45 +40,56 @@ public class ExceptionHandleController {
 
     @ExceptionHandler({HttpMessageNotReadableException.class})
     public ResponseEntity<ErrorResponse> handleInvalidRequestException() {
-        return ResponseEntity.
-                badRequest().
-                body(ErrorResponse.
-                        builder().
-                        msg("bad request").
-                        build());
+        return ResponseEntity
+                .badRequest()
+                .body(ErrorResponse
+                        .builder()
+                        .msg("bad request")
+                        .build());
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleJWTCreateException(@NotNull JWTCreationException exception) {
-        return ResponseEntity.
-                internalServerError().
-                body(ErrorResponse.
-                        builder().
-                        msg("JWT Creation error").
-                        error(exception.getMessage()).
-                        build());
+        return ResponseEntity
+                .internalServerError()
+                .body(ErrorResponse
+                        .builder()
+                        .msg("JWT Creation error")
+                        .error(exception.getMessage())
+                        .build());
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleJWTVerificationException(@NotNull JWTVerificationException exception) {
-        return ResponseEntity.
-                internalServerError().
-                body(ErrorResponse.
-                        builder().
-                        msg("JWT verification error").
-                        error(exception.getMessage()).
-                        build());
+        return ResponseEntity
+                .badRequest()
+                .body(ErrorResponse
+                        .builder()
+                        .msg("JWT verification error")
+                        .error(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(@NotNull UnauthorizedException exception) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponse
+                        .builder()
+                        .msg("unauthorized")
+                        .error(exception.getMessage())
+                        .build());
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleAnyException(@NotNull Exception exception) {
-        return ResponseEntity.
-                internalServerError().
-                body(ErrorResponse.
-                        builder().
-                        msg("unknown exception").
-                        error(exception.getMessage()).
-                        build());
+        return ResponseEntity
+                .internalServerError()
+                .body(ErrorResponse
+                        .builder()
+                        .msg("unknown exception")
+                        .error(exception.getMessage())
+                        .build());
     }
 
 }

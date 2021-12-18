@@ -1,9 +1,13 @@
+/*
+ * Copyright (c)  IInfo 2021.
+ */
+
 package com.i1nfo.icb;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.i1nfo.icb.component.JWTUtils;
 import com.i1nfo.icb.model.User;
 import com.i1nfo.icb.service.UserService;
+import com.i1nfo.icb.utils.JWTUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +45,7 @@ class IcbApplicationTests {
     @AfterTestMethod("testJWTCreate")
     public void testJWTVerify() {
         System.out.println("----- JWT verify test ------");
-        String jwt = jwtUtils.createToken("Test JWT");
+        String jwt = jwtUtils.createToken("Test JWT", new Date(1700000000000L));
         DecodedJWT subject = jwtUtils.verifyToken(jwt);
         Assertions.assertEquals(subject.getSubject(), "Test JWT");
         System.out.println("verified ok");

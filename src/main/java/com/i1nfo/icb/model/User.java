@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  IInfo 2021.
+ */
+
 package com.i1nfo.icb.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -9,9 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -19,14 +22,18 @@ import javax.validation.constraints.Size;
 @TableName("users")
 public class User {
     @TableId(type = IdType.AUTO)
+    @Positive
     private Long id;
 
-    @NotEmpty(groups = {UserLogin.class})
+    @NotEmpty(groups = {UserRegister.class, UserLogin.class})
     private String name;
 
     @Email(groups = {UserRegister.class})
     private String email;
 
-    @Size(min = 6, max = 40, groups = {UserLogin.class})
+    @Size(min = 6, max = 40, groups = {UserRegister.class, UserLogin.class})
     private String passwd;
+
+    @PastOrPresent
+    private Date lastLoginTime;
 }
