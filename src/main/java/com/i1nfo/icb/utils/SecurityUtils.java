@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  IInfo 2021.
+ * Copyright (c) IInfo 2021.
  */
 
 package com.i1nfo.icb.utils;
@@ -12,8 +12,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SecurityUtils {
-    public static @NotNull String calcMD5(@NotNull String m) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
+    public static @NotNull String calcMD5(@NotNull String m) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("no such algorithm: MD5");
+        }
         byte[] result = md.digest(m.getBytes(StandardCharsets.UTF_8));
         return new BigInteger(1, result).toString(16);
     }

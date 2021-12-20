@@ -1,11 +1,12 @@
 /*
- * Copyright (c)  IInfo 2021.
+ * Copyright (c) IInfo 2021.
  */
 
 package com.i1nfo.icb.interceptor;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.i1nfo.icb.exception.UnauthorizedException;
+import com.i1nfo.icb.service.UserService;
 import com.i1nfo.icb.utils.JWTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Component
 
@@ -23,13 +23,17 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final
     JWTUtils jwtUtils;
 
+    private final
+    UserService userService;
+
     @Autowired
-    public AuthInterceptor(JWTUtils jwtUtils) {
+    public AuthInterceptor(JWTUtils jwtUtils, UserService userService) {
         this.jwtUtils = jwtUtils;
+        this.userService = userService;
     }
 
     @Override
-    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws IOException {
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         String jwt = request.getHeader("Authorization");
         if (jwt == null || jwt.length() == 0)
             throw new UnauthorizedException("no authorization token");
@@ -37,8 +41,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (token.getSubject() == null || token.getSubject().length() == 0)
             throw new UnauthorizedException("no specific subject");
         String newToken = jwtUtils.autoUpdateToken(token);
-        if (newToken != null)
+        if (newToken != null) {
             response.addHeader("Authorization", newToken);
+            userService.updateLoginTime(Long.valueOf(token.getSubject()));
+        }
         return true;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  IInfo 2021.
+ * Copyright (c) IInfo 2021.
  */
 
 package com.i1nfo.icb.validate;

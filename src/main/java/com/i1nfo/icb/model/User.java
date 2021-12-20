@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  IInfo 2021.
+ * Copyright (c) IInfo 2021.
  */
 
 package com.i1nfo.icb.model;
@@ -23,17 +23,20 @@ import java.util.Date;
 public class User {
     @TableId(type = IdType.AUTO)
     @Positive
+    @Null(groups = {UserRegister.class, UserLogin.class})
     private Long id;
 
     @NotEmpty(groups = {UserRegister.class, UserLogin.class})
     private String name;
 
     @Email(groups = {UserRegister.class})
+    @NotBlank(groups = {UserRegister.class})
     private String email;
 
-    @Size(min = 6, max = 40, groups = {UserRegister.class, UserLogin.class})
+    @Size(min = 4, max = 40, groups = {UserRegister.class, UserLogin.class})
     private String passwd;
 
     @PastOrPresent
+    @Null(groups = {UserRegister.class, UserLogin.class})
     private Date lastLoginTime;
 }
