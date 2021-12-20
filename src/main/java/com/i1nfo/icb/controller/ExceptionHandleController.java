@@ -6,6 +6,7 @@ package com.i1nfo.icb.controller;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.i1nfo.icb.exception.NotAllowedException;
 import com.i1nfo.icb.exception.UnauthorizedException;
 import com.i1nfo.icb.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +51,26 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponse
                         .builder()
-                        .msg("unauthorized")
                         .error(exception.getMessage())
                         .build());
+    }
+
+    @ExceptionHandler(NotAllowedException.class)
+    public ResponseEntity<ErrorResponse> handleNotAllowedException(@NotNull NotAllowedException exception) {
+        if (exception.getType() == NotAllowedException.Type.ADMIN)
+            return ResponseEntity
+                    .status(HttpStatus.METHOD_NOT_ALLOWED)
+                    .body(ErrorResponse
+                            .builder()
+                            .error(exception.getMessage())
+                            .build());
+        else
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(ErrorResponse
+                            .builder()
+                            .error(exception.getMessage())
+                            .build());
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
@@ -62,7 +80,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                     .badRequest()
                     .body(ErrorResponse
                             .builder()
-                            .msg("duplicate entry for key")
+                            .msg("duplicate key")
                             .build());
         else
             return ResponseEntity

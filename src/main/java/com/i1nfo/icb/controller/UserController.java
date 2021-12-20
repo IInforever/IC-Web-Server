@@ -6,10 +6,11 @@ package com.i1nfo.icb.controller;
 
 import com.i1nfo.icb.model.User;
 import com.i1nfo.icb.service.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +25,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getUser(@PathVariable String id) {
-        User user = userService.getById(id);
+    @GetMapping
+    public ResponseEntity<Object> getUser(@RequestAttribute @NotNull Long userID) {
+        User user = userService.getBasicInfoByID(userID);
         if (user != null)
             return ResponseEntity.ok(user);
         else

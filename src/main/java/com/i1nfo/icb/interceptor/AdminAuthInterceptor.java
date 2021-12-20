@@ -7,10 +7,8 @@ package com.i1nfo.icb.interceptor;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.i1nfo.icb.exception.NotAllowedException;
 import com.i1nfo.icb.exception.UnauthorizedException;
-import com.i1nfo.icb.service.UserService;
 import com.i1nfo.icb.utils.JWTUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -18,18 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class AuthInterceptor implements HandlerInterceptor {
+public class AdminAuthInterceptor implements HandlerInterceptor {
 
     private final
     JWTUtils jwtUtils;
 
-    private final
-    UserService userService;
-
-    @Autowired
-    public AuthInterceptor(JWTUtils jwtUtils, UserService userService) {
+    public AdminAuthInterceptor(JWTUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
-        this.userService = userService;
     }
 
     @Override
@@ -38,15 +31,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (jwt == null || jwt.length() == 0)
             throw new UnauthorizedException("no authorization token");
         DecodedJWT token = jwtUtils.verifyToken(jwt);
-        if (token.getSubject() == null || token.getSubject().length() == 0)
-            throw new UnauthorizedException("no specific subject");
-        if (token.getSubject().equals("Admin"))
-            throw new NotAllowedException("not allowed for admin", NotAllowedException.Type.ADMIN);
-        request.setAttribute("userID", Long.valueOf(token.getSubject()));
+        if (!token.getSubject().equals("Admin"))
+            throw new NotAllowedException("admin auth required", NotAllowedException.Type.USER);
         String newToken = jwtUtils.autoUpdateToken(token);
         if (newToken != null) {
             response.addHeader("Authorization", newToken);
-            userService.updateLoginTime(Long.valueOf(token.getSubject()));
         }
         return true;
     }

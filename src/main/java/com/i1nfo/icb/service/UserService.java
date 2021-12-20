@@ -4,7 +4,7 @@
 
 package com.i1nfo.icb.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.i1nfo.icb.mapper.UserMapper;
 import com.i1nfo.icb.model.User;
@@ -22,13 +22,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     }
 
     public Long login(String name, String pass) {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        HashMap<String, String> params = new HashMap<>();
-        params.put("name", name);
-        params.put("passwd", SecurityUtils.calcMD5(pass));
-        User user = baseMapper.selectOne(wrapper.select("id").allEq(params));
+        HashMap<SFunction<User, ?>, Object> params = new HashMap<>();
+        params.put(User::getName, name);
+        params.put(User::getPasswd, SecurityUtils.calcMD5(pass));
+        User user = lambdaQuery().select(User::getId).allEq(params).one();
         if (user == null)
-            return 0L;
+            return null;
         updateLoginTime(user.getId());
         return user.getId();
     }
@@ -36,6 +35,17 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public void updateLoginTime(Long id) {
         if (!lambdaUpdate().eq(User::getId, id).setSql("last_login_time = current_timestamp").update())
             log.warn(String.format("Update user %d last login time fail", id));
+    }
+
+    public User getBasicInfoByID(Long id) {
+        return lambdaQuery()
+                .select(
+                        User::getId,
+                        User::getName,
+                        User::getEmail,
+                        User::getLastLoginTime)
+                .eq(User::getId, id)
+                .one();
     }
 
 }

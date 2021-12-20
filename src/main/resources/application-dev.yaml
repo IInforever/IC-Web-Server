@@ -11,3 +11,8 @@ jwt:
   private-key-path: ecc-private-key.pem
   expires-time: 1800
   update-time: 900
+
+icb:
+  admin:
+    username: root
+    password: p@s$Word

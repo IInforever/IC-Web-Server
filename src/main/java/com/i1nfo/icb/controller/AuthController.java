@@ -35,7 +35,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Validated(UserLogin.class) @NotNull User user) {
         Long id = userService.login(user.getName(), user.getPasswd());
-        if (id == 0)
+        if (id == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().header("Authorization", jwt.createToken(String.valueOf(id))).build();
     }
