@@ -5,7 +5,6 @@
 package com.i1nfo.icb;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.i1nfo.icb.model.User;
 import com.i1nfo.icb.service.UserService;
 import com.i1nfo.icb.utils.JWTUtils;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.event.annotation.AfterTestMethod;
 
 import java.util.Date;
-import java.util.List;
 
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -27,13 +25,6 @@ class IcbApplicationTests {
 
     @Autowired
     JWTUtils jwtUtils;
-
-    @Test
-    public void testSelect() {
-        System.out.println("----- selectAll method test ------");
-        List<User> userList = userService.list();
-        userList.forEach(System.out::println);
-    }
 
     @Test
     public void testJWTCreate() {
