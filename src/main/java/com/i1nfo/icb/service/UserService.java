@@ -16,24 +16,30 @@ import java.util.HashMap;
 
 @Service
 public class UserService extends ServiceImpl<UserMapper, User> {
-    public boolean register(@NotNull User user) {
+
+    public boolean create(@NotNull User user) {
         user.setPasswd(SecurityUtils.calcMD5(user.getPasswd()));
         return save(user);
     }
 
-    public Long login(String name, String pass) {
+    public Long getIDByNameAndPasswd(String name, String pass) {
         HashMap<SFunction<User, ?>, Object> params = new HashMap<>();
         params.put(User::getName, name);
         params.put(User::getPasswd, SecurityUtils.calcMD5(pass));
-        User user = lambdaQuery().select(User::getId).allEq(params).one();
+        User user = lambdaQuery()
+                .select(User::getId)
+                .allEq(params)
+                .one();
         if (user == null)
             return null;
-        updateLoginTime(user.getId());
         return user.getId();
     }
 
     public void updateLoginTime(Long id) {
-        if (!lambdaUpdate().eq(User::getId, id).setSql("last_login_time = current_timestamp").update())
+        if (!lambdaUpdate()
+                .eq(User::getId, id)
+                .setSql("last_login_time = current_timestamp")
+                .update())
             log.warn(String.format("Update user %d last login time fail", id));
     }
 
@@ -47,5 +53,14 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .eq(User::getId, id)
                 .one();
     }
+
+    public boolean updateById(Long id, @NotNull User entity) {
+        String passwd = entity.getPasswd();
+        if (passwd != null && !passwd.isEmpty())
+            entity.setPasswd(SecurityUtils.calcMD5(passwd));
+        entity.setId(id);
+        return updateById(entity);
+    }
+
 
 }

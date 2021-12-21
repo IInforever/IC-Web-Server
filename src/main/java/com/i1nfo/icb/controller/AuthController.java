@@ -34,15 +34,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Validated(UserLogin.class) @NotNull User user) {
-        Long id = userService.login(user.getName(), user.getPasswd());
+        Long id = userService.getIDByNameAndPasswd(user.getName(), user.getPasswd());
         if (id == null)
             return ResponseEntity.notFound().build();
+        userService.updateLoginTime(id);
         return ResponseEntity.ok().header("Authorization", jwt.createToken(String.valueOf(id))).build();
     }
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Validated(UserRegister.class) User user) {
-        if (userService.register(user))
+        if (userService.create(user))
             return ResponseEntity.ok().build();
         else
             return ResponseEntity.badRequest().build();

@@ -9,11 +9,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.i1nfo.icb.validate.UserLogin;
 import com.i1nfo.icb.validate.UserRegister;
+import com.i1nfo.icb.validate.UserUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
@@ -21,22 +25,28 @@ import java.util.Date;
 @NoArgsConstructor
 @TableName("users")
 public class User {
+
     @TableId(type = IdType.AUTO)
-    @Positive
-    @Null(groups = {UserRegister.class, UserLogin.class})
+    @Null
     private Long id;
 
-    @NotEmpty(groups = {UserRegister.class, UserLogin.class})
+    @Size(min = 4, max = 15, groups = {UserRegister.class, UserLogin.class, UserUpdate.class})
+    @NotBlank(groups = {UserRegister.class, UserLogin.class})
     private String name;
 
-    @Email(groups = {UserRegister.class})
+    @Email(groups = {UserRegister.class, UserUpdate.class})
     @NotBlank(groups = {UserRegister.class})
     private String email;
 
-    @Size(min = 4, max = 40, groups = {UserRegister.class, UserLogin.class})
+    @Size(min = 4, max = 40, groups = {UserRegister.class, UserLogin.class, UserUpdate.class})
+    @NotBlank(groups = {UserRegister.class, UserLogin.class})
     private String passwd;
 
-    @PastOrPresent
-    @Null(groups = {UserRegister.class, UserLogin.class})
+    @Null
     private Date lastLoginTime;
+
+    public boolean isEmpty() {
+        return id == null && name == null && email == null && passwd == null && lastLoginTime == null;
+    }
+
 }

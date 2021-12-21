@@ -4,5 +4,7 @@
 
 package com.i1nfo.icb.validate;
 
-public interface UserRegister {
+import javax.validation.groups.Default;
+
+public interface UserRegister extends Default {
 }
