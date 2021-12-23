@@ -35,8 +35,8 @@ public class AdminController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> adminLogin(@RequestBody @Validated @NotNull Admin info) {
-        if (info.getUsername().equals(appConfig.getAdmin().getUsername()) &&
-                info.getPassword().equals(appConfig.getAdmin().getPassword())) {
+        if (info.getName().equals(appConfig.getAdmin().getUsername()) &&
+                info.getPasswd().equals(appConfig.getAdmin().getPassword())) {
             return ResponseEntity.ok().header("Authorization", jwtUtils.createToken("Admin", null)).build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -48,10 +48,10 @@ public class AdminController {
     public static class Admin {
 
         @NotBlank
-        private String username;
+        private String name;
 
         @NotBlank
-        private String password;
+        private String passwd;
 
     }
 

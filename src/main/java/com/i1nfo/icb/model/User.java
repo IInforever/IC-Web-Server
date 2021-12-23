@@ -31,7 +31,7 @@ public class User {
     @Null
     private Long id;
 
-    @Size(min = 4, max = 15, groups = {UserRegister.class, UserLogin.class, UserUpdate.class})
+    @Size(min = 1, max = 15, groups = {UserRegister.class, UserLogin.class, UserUpdate.class})
     @NotBlank(groups = {UserRegister.class, UserLogin.class})
     private String name;
 
