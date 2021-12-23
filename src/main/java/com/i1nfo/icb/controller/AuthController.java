@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class AuthController {
@@ -38,7 +41,9 @@ public class AuthController {
         if (id == null)
             return ResponseEntity.notFound().build();
         userService.updateLoginTime(id);
-        return ResponseEntity.ok().header("Authorization", jwt.createToken(String.valueOf(id))).build();
+        Map<String, String> claim = new HashMap<>();
+        claim.put("uid", String.valueOf(id));
+        return ResponseEntity.ok().header("Authorization", jwt.createToken("auth", claim)).build();
     }
 
     @PostMapping("/register")

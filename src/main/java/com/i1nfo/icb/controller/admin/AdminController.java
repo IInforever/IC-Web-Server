@@ -37,7 +37,7 @@ public class AdminController {
     public ResponseEntity<Object> adminLogin(@RequestBody @Validated @NotNull Admin info) {
         if (info.getUsername().equals(appConfig.getAdmin().getUsername()) &&
                 info.getPassword().equals(appConfig.getAdmin().getPassword())) {
-            return ResponseEntity.ok().header("Authorization", jwtUtils.createToken("Admin")).build();
+            return ResponseEntity.ok().header("Authorization", jwtUtils.createToken("Admin", null)).build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

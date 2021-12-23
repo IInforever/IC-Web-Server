@@ -7,6 +7,7 @@ package com.i1nfo.icb.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.i1nfo.icb.validate.UserLogin;
 import com.i1nfo.icb.validate.UserRegister;
 import com.i1nfo.icb.validate.UserUpdate;
@@ -45,6 +46,7 @@ public class User {
     @Null
     private Date lastLoginTime;
 
+    @JsonIgnore
     public boolean isEmpty() {
         return id == null && name == null && email == null && passwd == null && lastLoginTime == null;
     }

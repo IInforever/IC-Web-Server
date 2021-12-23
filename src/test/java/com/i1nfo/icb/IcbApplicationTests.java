@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  IInfo 2021.
+ * Copyright (c) IInfo 2021.
  */
 
 package com.i1nfo.icb;
@@ -29,14 +29,14 @@ class IcbApplicationTests {
     @Test
     public void testJWTCreate() {
         System.out.println("----- JWT create test ------");
-        System.out.println(jwtUtils.createToken("Test JWT"));
+        System.out.println(jwtUtils.createToken("Test JWT", null));
     }
 
     @Test
     @AfterTestMethod("testJWTCreate")
     public void testJWTVerify() {
         System.out.println("----- JWT verify test ------");
-        String jwt = jwtUtils.createToken("Test JWT", new Date(1700000000000L));
+        String jwt = jwtUtils.createToken("Test JWT", new Date(1700000000000L), null);
         DecodedJWT subject = jwtUtils.verifyToken(jwt);
         Assertions.assertEquals(subject.getSubject(), "Test JWT");
         System.out.println("verified ok");
@@ -46,7 +46,7 @@ class IcbApplicationTests {
     @AfterTestMethod("testJWTVerify")
     public void testJWTUpdate() {
         System.out.println("----- JWT update test ------");
-        String jwt = jwtUtils.createToken("Test JWT");
+        String jwt = jwtUtils.createToken("Test JWT", null);
         DecodedJWT subject = jwtUtils.verifyToken(jwt);
         String newJwt = jwtUtils.autoUpdateToken(subject, new Date(0));
         System.out.println(newJwt);

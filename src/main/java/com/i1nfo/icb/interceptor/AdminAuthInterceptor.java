@@ -28,7 +28,7 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         String jwt = request.getHeader("Authorization");
-        if (jwt == null || jwt.length() == 0)
+        if (jwt == null || jwt.isBlank())
             throw new UnauthorizedException("no authorization token");
         DecodedJWT token = jwtUtils.verifyToken(jwt);
         if (!token.getSubject().equals("Admin"))

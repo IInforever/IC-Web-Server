@@ -38,15 +38,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (jwt == null || jwt.length() == 0)
             throw new UnauthorizedException("no authorization token");
         DecodedJWT token = jwtUtils.verifyToken(jwt);
-        if (token.getSubject() == null || token.getSubject().length() == 0)
+        if (token.getSubject() == null || token.getSubject().isBlank())
             throw new UnauthorizedException("no specific subject");
         if (token.getSubject().equals("Admin"))
             throw new NotAllowedException("not allowed for admin", NotAllowedException.Type.ADMIN);
-        request.setAttribute("userID", Long.valueOf(token.getSubject()));
+        request.setAttribute("userID", Long.valueOf(token.getClaim("uid").asString()));
         String newToken = jwtUtils.autoUpdateToken(token);
         if (newToken != null) {
             response.addHeader("Authorization", newToken);
-            userService.updateLoginTime(Long.valueOf(token.getSubject()));
+            userService.updateLoginTime(token.getClaim("uid").asLong());
         }
         return true;
     }
