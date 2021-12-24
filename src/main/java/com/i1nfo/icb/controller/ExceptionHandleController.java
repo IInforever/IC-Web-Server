@@ -29,6 +29,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                 .internalServerError()
                 .body(ErrorResponse
                         .builder()
+                        .code(50)
                         .msg("JWT Creation error")
                         .error(exception.getMessage())
                         .build());
@@ -40,6 +41,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                 .badRequest()
                 .body(ErrorResponse
                         .builder()
+                        .code(20)
                         .msg("JWT verification error")
                         .error(exception.getMessage())
                         .build());
@@ -51,6 +53,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponse
                         .builder()
+                        .code(10)
                         .error(exception.getMessage())
                         .build());
     }
@@ -62,6 +65,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                     .status(HttpStatus.METHOD_NOT_ALLOWED)
                     .body(ErrorResponse
                             .builder()
+                            .code(40)
                             .error(exception.getMessage())
                             .build());
         else
@@ -69,6 +73,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                     .status(HttpStatus.FORBIDDEN)
                     .body(ErrorResponse
                             .builder()
+                            .code(41)
                             .error(exception.getMessage())
                             .build());
     }
@@ -80,6 +85,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                     .badRequest()
                     .body(ErrorResponse
                             .builder()
+                            .code(21)
                             .msg("duplicate key")
                             .build());
         else
@@ -87,6 +93,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                     .badRequest()
                     .body(ErrorResponse
                             .builder()
+                            .code(22)
                             .msg("invalid")
                             .error(exception.getMessage())
                             .build());

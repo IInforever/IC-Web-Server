@@ -13,5 +13,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ErrorResponse {
     String msg;
+    Integer code;
     Object error;
 }
