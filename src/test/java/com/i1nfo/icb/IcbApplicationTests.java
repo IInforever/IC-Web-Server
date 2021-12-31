@@ -5,6 +5,8 @@
 package com.i1nfo.icb;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.i1nfo.icb.model.Paste;
+import com.i1nfo.icb.service.PasteService;
 import com.i1nfo.icb.service.UserService;
 import com.i1nfo.icb.utils.JWTUtils;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +24,9 @@ class IcbApplicationTests {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    PasteService pasteService;
 
     @Autowired
     JWTUtils jwtUtils;
@@ -51,6 +56,14 @@ class IcbApplicationTests {
         String newJwt = jwtUtils.autoUpdateToken(subject, new Date(0));
         System.out.println(newJwt);
         Assertions.assertNotEquals(jwt, newJwt);
+    }
+
+    @Test
+    public void testInsert() {
+        Paste paste = new Paste();
+        paste.setPaste("23333");
+        paste.setPri(true);
+        pasteService.save(paste);
     }
 
 }

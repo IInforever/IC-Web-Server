@@ -1,9 +1,11 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: passwd
+    username: info
+    password: password
     url: jdbc:mariadb://localhost:3306/icb
+  devtools:
+    add-properties: true
 
 jwt:
   issuer: "i1nfo"
@@ -15,4 +17,4 @@ jwt:
 icb:
   admin:
     username: root
-    password: p@s$Word
+    password: password

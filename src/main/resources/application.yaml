@@ -5,6 +5,8 @@ server:
 spring:
   jackson:
     default-property-inclusion: non_null # exclude null value
+  devtools:
+    add-properties: false
 
 mybatis-plus:
   configuration:
