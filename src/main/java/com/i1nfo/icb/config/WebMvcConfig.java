@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.config;
@@ -31,7 +31,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(@NotNull InterceptorRegistry registry) {
         // general user auth interceptor
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/api/user");
+                .addPathPatterns("/api/user")
+                .addPathPatterns("/api/paste");
 
         // administrator auth interceptor
         registry.addInterceptor(adminAuthInterceptor)

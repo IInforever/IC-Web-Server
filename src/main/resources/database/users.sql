@@ -1,10 +1,10 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 create table if not exists users
 (
-    id              int auto_increment
+    id int unsigned auto_increment
         primary key,
     name            varchar(15)                           not null,
     passwd          char(32)                              not null,

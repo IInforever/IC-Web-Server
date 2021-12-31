@@ -1,11 +1,10 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.i1nfo.icb.model.Paste;
 import com.i1nfo.icb.service.PasteService;
 import com.i1nfo.icb.service.UserService;
 import com.i1nfo.icb.utils.JWTUtils;
@@ -58,12 +57,5 @@ class IcbApplicationTests {
         Assertions.assertNotEquals(jwt, newJwt);
     }
 
-    @Test
-    public void testInsert() {
-        Paste paste = new Paste();
-        paste.setPaste("23333");
-        paste.setPri(true);
-        pasteService.save(paste);
-    }
 
 }
