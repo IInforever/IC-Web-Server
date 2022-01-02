@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.service;
@@ -45,8 +45,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     public User getBasicInfoByID(Long id) {
         return lambdaQuery()
-                .select(
-                        User::getId,
+                .select(User::getId,
                         User::getName,
                         User::getEmail,
                         User::getLastLoginTime)

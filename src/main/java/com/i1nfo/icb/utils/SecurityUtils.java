@@ -1,10 +1,8 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.utils;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +10,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SecurityUtils {
-    public static @NotNull String calcMD5(@NotNull String m) {
+    public static String calcMD5(String m) {
+        if (m == null)
+            return null;
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
