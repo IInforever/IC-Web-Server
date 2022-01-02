@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -46,33 +46,6 @@ public class PasteController {
         return getCreateResponse(paste);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getPaste(
-            @PathVariable String id,
-            @RequestAttribute(required = false) Long userID,
-            @RequestParam(required = false) String passwd) {
-        Paste paste = pasteService.getById(id);
-        if (paste == null)
-            return ResponseEntity.notFound().build();
-        // check expiration time
-        if (new Date().after(paste.getExpireTime()))
-            return ResponseEntity.status(HttpStatus.GONE).build();
-        // check authority
-        if (paste.getIsPrivate()) {
-            if (!Objects.equals(paste.getUid(), userID))
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        // check password
-        if (!Objects.equals(paste.getPasswd(), SecurityUtils.calcMD5(passwd)))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        // remove unnecessary data
-        paste.setPasswd(null);
-        paste.setIsPrivate(null);
-        paste.setUid(null);
-
-        return ResponseEntity.ok(paste);
-    }
-
     @NotNull
     protected ResponseEntity<Object> getCreateResponse(@Validated(PasteValidate.class) @RequestBody Paste paste) {
         Long id = pasteService.create(paste);
@@ -82,6 +55,47 @@ public class PasteController {
             return ResponseEntity.ok(response);
         }
         return ResponseEntity.internalServerError().build();
+    }
+
+    /**
+     * Get current user's all pastes
+     */
+    @GetMapping
+    public ResponseEntity<Object> getPaste(@RequestAttribute Long userID) {
+        List<Paste> pastes = pasteService.getByUid(userID);
+        if (pastes == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(pasteService.getByUid(userID));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getPaste(
+            @PathVariable String id,
+            @RequestAttribute(required = false) Long userID,
+            @RequestParam(required = false) String passwd) {
+        Paste paste = pasteService.getById(id);
+
+        if (paste == null)
+            return ResponseEntity.notFound().build();
+        // check expiration time
+        if (new Date().after(paste.getExpireTime()))
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        // check authority
+        if (paste.getUid() != null && paste.getUid().equals(userID)) {
+            if (paste.hasPasswd())
+                paste.setPasswd(null);
+            return ResponseEntity.ok(paste);
+        }
+
+        if (paste.getIsPrivate())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        // check password
+        if (paste.hasPasswd() && !paste.getPasswd().equals(SecurityUtils.calcMD5(passwd)))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        paste.setPasswd(null);
+        return ResponseEntity.ok(paste);
     }
 
 }

@@ -35,7 +35,6 @@ public class Paste {
 
     @Null(groups = AnonymousPasteValidate.class)
     @NotNull(groups = PasteValidate.class)
-    @TableField("private")
     private Boolean isPrivate;
 
     @TableField(exist = false)
@@ -47,10 +46,22 @@ public class Paste {
     @Null
     private Date expireTime;
 
+    @Null
+    private Date createTime;
+
     @Size(min = 1, max = 30, groups = {AnonymousPasteValidate.class, PasteValidate.class})
     private String passwd;
 
     @NotBlank
     private String paste;
+
+    @Null
+    @TableField(exist = false)
+    private Boolean hasPasswd;
+
+    public boolean hasPasswd() {
+        this.hasPasswd = passwd != null;
+        return this.hasPasswd;
+    }
 
 }

@@ -48,7 +48,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .select(User::getId,
                         User::getName,
                         User::getEmail,
-                        User::getLastLoginTime)
+                        User::getCreateTime)
                 .eq(User::getId, id)
                 .one();
     }

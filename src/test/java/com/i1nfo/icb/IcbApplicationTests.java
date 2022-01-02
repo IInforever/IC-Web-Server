@@ -57,5 +57,4 @@ class IcbApplicationTests {
         Assertions.assertNotEquals(jwt, newJwt);
     }
 
-
 }

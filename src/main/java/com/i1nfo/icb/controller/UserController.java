@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.controller;
@@ -9,10 +9,7 @@ import com.i1nfo.icb.service.UserService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -32,6 +29,16 @@ public class UserController {
             return ResponseEntity.ok(user);
         else
             return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<Object> patchUser(@RequestAttribute @NotNull Long userID,
+                                            @RequestBody @NotNull User user) {
+        if (user.isEmpty())
+            return ResponseEntity.badRequest().build();
+        if (userService.updateById(userID, user))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
     }
 
 }

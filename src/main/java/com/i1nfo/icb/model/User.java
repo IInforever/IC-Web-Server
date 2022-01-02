@@ -46,6 +46,9 @@ public class User {
     @Null
     private Date lastLoginTime;
 
+    @Null
+    private Date createTime;
+
     @JsonIgnore
     public boolean isEmpty() {
         return id == null && name == null && email == null && passwd == null && lastLoginTime == null;
