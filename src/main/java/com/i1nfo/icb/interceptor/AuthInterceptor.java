@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.interceptor;
@@ -32,11 +32,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         this.userService = userService;
     }
 
-    @Override
-    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
-        String jwt = request.getHeader("Authorization");
-        if (jwt == null || jwt.length() == 0)
-            throw new UnauthorizedException("no authorization token");
+    protected static boolean CheckHeader(HttpServletRequest request, HttpServletResponse response, String jwt, @NotNull JWTUtils jwtUtils, UserService userService) {
         DecodedJWT token = jwtUtils.verifyToken(jwt);
         if (token.getSubject() == null || token.getSubject().isBlank())
             throw new UnauthorizedException("no specific subject");
@@ -49,5 +45,13 @@ public class AuthInterceptor implements HandlerInterceptor {
             userService.updateLoginTime(token.getClaim("uid").asLong());
         }
         return true;
+    }
+
+    @Override
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
+        String jwt = request.getHeader("Authorization");
+        if (jwt == null || jwt.length() == 0)
+            throw new UnauthorizedException("no authorization token");
+        return CheckHeader(request, response, jwt, jwtUtils, userService);
     }
 }

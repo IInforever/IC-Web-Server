@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.controller;
@@ -7,8 +7,8 @@ package com.i1nfo.icb.controller;
 import com.i1nfo.icb.model.User;
 import com.i1nfo.icb.service.UserService;
 import com.i1nfo.icb.utils.JWTUtils;
-import com.i1nfo.icb.validate.UserLogin;
-import com.i1nfo.icb.validate.UserRegister;
+import com.i1nfo.icb.validate.UserLoginValidate;
+import com.i1nfo.icb.validate.UserRegisterValidate;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody @Validated(UserLogin.class) @NotNull User user) {
+    public ResponseEntity<Object> login(@RequestBody @Validated(UserLoginValidate.class) @NotNull User user) {
         Long id = userService.getIDByNameAndPasswd(user.getName(), user.getPasswd());
         if (id == null)
             return ResponseEntity.notFound().build();
@@ -47,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody @Validated(UserRegister.class) User user) {
+    public ResponseEntity<Object> register(@RequestBody @Validated(UserRegisterValidate.class) User user) {
         if (userService.create(user))
             return ResponseEntity.ok().build();
         else

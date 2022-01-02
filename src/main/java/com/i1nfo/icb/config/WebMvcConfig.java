@@ -6,6 +6,7 @@ package com.i1nfo.icb.config;
 
 import com.i1nfo.icb.interceptor.AdminAuthInterceptor;
 import com.i1nfo.icb.interceptor.AuthInterceptor;
+import com.i1nfo.icb.interceptor.PasteInterceptor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,18 +22,25 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final
     AdminAuthInterceptor adminAuthInterceptor;
 
+    private final
+    PasteInterceptor pasteInterceptor;
+
     @Autowired
-    public WebMvcConfig(AuthInterceptor authInterceptor, AdminAuthInterceptor adminAuthInterceptor) {
+    public WebMvcConfig(AuthInterceptor authInterceptor, AdminAuthInterceptor adminAuthInterceptor, PasteInterceptor pasteInterceptor) {
         this.authInterceptor = authInterceptor;
         this.adminAuthInterceptor = adminAuthInterceptor;
+        this.pasteInterceptor = pasteInterceptor;
     }
 
     @Override
     public void addInterceptors(@NotNull InterceptorRegistry registry) {
         // general user auth interceptor
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/api/user")
-                .addPathPatterns("/api/paste");
+                .addPathPatterns("/api/user");
+
+        // paste api auth check interceptor
+        registry.addInterceptor(pasteInterceptor)
+                .addPathPatterns("/api/paste/**");
 
         // administrator auth interceptor
         registry.addInterceptor(adminAuthInterceptor)

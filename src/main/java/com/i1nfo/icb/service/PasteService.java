@@ -4,6 +4,7 @@
 
 package com.i1nfo.icb.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.i1nfo.icb.mapper.PasteMapper;
 import com.i1nfo.icb.model.Paste;
@@ -21,6 +22,13 @@ public class PasteService extends ServiceImpl<PasteMapper, Paste> {
         if (paste.getPasswd() != null)
             paste.setPasswd(SecurityUtils.calcMD5(paste.getPasswd()));
         return save(paste) ? paste.getId() : null;
+    }
+
+
+    public int cleanUpExpiredPaste() {
+        LambdaQueryWrapper<Paste> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.lt(Paste::getExpireTime, new Date());
+        return baseMapper.delete(queryWrapper);
     }
 
 }

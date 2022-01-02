@@ -1,10 +1,10 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.validate;
 
 import javax.validation.groups.Default;
 
-public interface UserUpdate extends Default {
+public interface UserUpdateValidate extends Default {
 }

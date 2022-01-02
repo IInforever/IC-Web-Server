@@ -1,14 +1,14 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.controller.admin;
 
 import com.i1nfo.icb.model.User;
 import com.i1nfo.icb.service.UserService;
-import com.i1nfo.icb.validate.UserRegister;
-import com.i1nfo.icb.validate.UserUpdate;
-import com.i1nfo.icb.validate.UserUpdateAll;
+import com.i1nfo.icb.validate.UserRegisterValidate;
+import com.i1nfo.icb.validate.UserUpdateAllValidate;
+import com.i1nfo.icb.validate.UserUpdateValidate;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ public class UsersAdminController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody @Validated(UserRegister.class) User user) {
+    public ResponseEntity<Object> createUser(@RequestBody @Validated(UserRegisterValidate.class) User user) {
         if (userService.create(user))
             return ResponseEntity.ok().build();
         else
@@ -54,14 +54,14 @@ public class UsersAdminController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody @Validated(UserUpdateAll.class) User user) {
+    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody @Validated(UserUpdateAllValidate.class) User user) {
         if (userService.updateById(id, user))
             return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> patchUser(@PathVariable Long id, @RequestBody @Validated(UserUpdate.class) @NotNull User user) {
+    public ResponseEntity<Object> patchUser(@PathVariable Long id, @RequestBody @Validated(UserUpdateValidate.class) @NotNull User user) {
         if (user.isEmpty())
             return ResponseEntity.badRequest().build();
         if (userService.updateById(id, user))

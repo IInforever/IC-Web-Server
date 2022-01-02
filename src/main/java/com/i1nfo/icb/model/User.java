@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.model;
@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.i1nfo.icb.validate.UserLogin;
-import com.i1nfo.icb.validate.UserRegister;
-import com.i1nfo.icb.validate.UserUpdate;
+import com.i1nfo.icb.validate.UserLoginValidate;
+import com.i1nfo.icb.validate.UserRegisterValidate;
+import com.i1nfo.icb.validate.UserUpdateValidate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,16 +31,16 @@ public class User {
     @Null
     private Long id;
 
-    @Size(min = 1, max = 15, groups = {UserRegister.class, UserLogin.class, UserUpdate.class})
-    @NotBlank(groups = {UserRegister.class, UserLogin.class})
+    @Size(min = 1, max = 15, groups = {UserRegisterValidate.class, UserLoginValidate.class, UserUpdateValidate.class})
+    @NotBlank(groups = {UserRegisterValidate.class, UserLoginValidate.class})
     private String name;
 
-    @Email(groups = {UserRegister.class, UserUpdate.class})
-    @NotBlank(groups = {UserRegister.class})
+    @Email(groups = {UserRegisterValidate.class, UserUpdateValidate.class})
+    @NotBlank(groups = {UserRegisterValidate.class})
     private String email;
 
-    @Size(min = 4, max = 40, groups = {UserRegister.class, UserLogin.class, UserUpdate.class})
-    @NotBlank(groups = {UserRegister.class, UserLogin.class})
+    @Size(min = 4, max = 40, groups = {UserRegisterValidate.class, UserLoginValidate.class, UserUpdateValidate.class})
+    @NotBlank(groups = {UserRegisterValidate.class, UserLoginValidate.class})
     private String passwd;
 
     @Null
