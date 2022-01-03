@@ -7,8 +7,9 @@ package com.i1nfo.icb.controller;
 import com.i1nfo.icb.model.Paste;
 import com.i1nfo.icb.service.PasteService;
 import com.i1nfo.icb.utils.SecurityUtils;
-import com.i1nfo.icb.validate.AnonymousPasteValidate;
-import com.i1nfo.icb.validate.PasteValidate;
+import com.i1nfo.icb.validate.AnonymousPasteCreateValidate;
+import com.i1nfo.icb.validate.PasteCreateValidate;
+import com.i1nfo.icb.validate.PasteUpdateValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,19 +36,19 @@ public class PasteController {
     }
 
     @PostMapping("/anonymous")
-    public ResponseEntity<Object> createAnonymousPaste(@RequestBody @Validated(AnonymousPasteValidate.class) Paste paste) {
+    public ResponseEntity<Object> createAnonymousPaste(@RequestBody @Validated(AnonymousPasteCreateValidate.class) Paste paste) {
         return getCreateResponse(paste);
     }
 
     @PostMapping
-    public ResponseEntity<Object> createPaste(@RequestBody @Validated(PasteValidate.class) @NotNull Paste paste,
+    public ResponseEntity<Object> createPaste(@RequestBody @Validated(PasteCreateValidate.class) @NotNull Paste paste,
                                               @RequestAttribute @NotNull Long userID) {
         paste.setUid(userID);
         return getCreateResponse(paste);
     }
 
     @NotNull
-    protected ResponseEntity<Object> getCreateResponse(@Validated(PasteValidate.class) @RequestBody Paste paste) {
+    protected ResponseEntity<Object> getCreateResponse(@Validated(PasteCreateValidate.class) @RequestBody Paste paste) {
         Long id = pasteService.create(paste);
         if (id != null) {
             Map<String, Long> response = new HashMap<>();
@@ -79,7 +80,7 @@ public class PasteController {
             return ResponseEntity.notFound().build();
         // check expiration time
         if (new Date().after(paste.getExpireTime()))
-            return ResponseEntity.status(HttpStatus.GONE).build();
+            return ResponseEntity.notFound().build();
         // check authority
         if (paste.getUid() != null && paste.getUid().equals(userID)) {
             if (paste.hasPasswd())
@@ -97,5 +98,23 @@ public class PasteController {
         paste.setPasswd(null);
         return ResponseEntity.ok(paste);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Object> patchPaste(@PathVariable Long id,
+                                             @RequestAttribute Long userID,
+                                             @RequestBody @Validated(PasteUpdateValidate.class) @NotNull Paste paste) {
+        if (paste.isEmpty())
+            return ResponseEntity.badRequest().build();
+        if (pasteService.updateById(id, paste, userID) != 0)
+            return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
+    }
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Object> updatePaste(@PathVariable Long id,
+//                                              @RequestAttribute Long userID,
+//                                              @RequestBody @Validated(PasteUpdateAllValidate.class) Paste paste) {
+//        return ResponseEntity.ok().build();
+//    }
 
 }

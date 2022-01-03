@@ -54,9 +54,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     }
 
     public boolean updateById(Long id, @NotNull User entity) {
-        String passwd = entity.getPasswd();
-        if (passwd != null && !passwd.isEmpty())
-            entity.setPasswd(SecurityUtils.calcMD5(passwd));
+        entity.setPasswd(SecurityUtils.calcMD5(entity.getPasswd()));
         entity.setId(id);
         return updateById(entity);
     }

@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.i1nfo.icb.validate.AnonymousPasteValidate;
-import com.i1nfo.icb.validate.PasteValidate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.i1nfo.icb.validate.AnonymousPasteCreateValidate;
+import com.i1nfo.icb.validate.PasteCreateValidate;
+import com.i1nfo.icb.validate.PasteUpdateValidate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,17 +32,29 @@ public class Paste {
     @Null
     private Long uid;
 
-    @Size(min = 1, max = 15, groups = {AnonymousPasteValidate.class, PasteValidate.class})
+    @Size(min = 1, max = 15, groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class,
+            PasteUpdateValidate.class
+    })
     private String title;
 
-    @Null(groups = AnonymousPasteValidate.class)
-    @NotNull(groups = PasteValidate.class)
+    @Null(groups = AnonymousPasteCreateValidate.class)
+    @NotNull(groups = PasteCreateValidate.class)
     private Boolean isPrivate;
 
     @TableField(exist = false)
-    @NotNull(groups = {AnonymousPasteValidate.class, PasteValidate.class})
-    @Min(value = 600, groups = {AnonymousPasteValidate.class, PasteValidate.class})
-    @Max(value = 86400, groups = {AnonymousPasteValidate.class, PasteValidate.class})
+    @NotNull(groups = {AnonymousPasteCreateValidate.class, PasteCreateValidate.class})
+    @Min(value = 600, groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class,
+            PasteUpdateValidate.class
+    })
+    @Max(value = 86400, groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class,
+            PasteUpdateValidate.class
+    })
     private Integer expireDuration;
 
     @Null
@@ -49,19 +63,52 @@ public class Paste {
     @Null
     private Date createTime;
 
-    @Size(min = 1, max = 30, groups = {AnonymousPasteValidate.class, PasteValidate.class})
+    @Size(min = 1, max = 30, groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class,
+            PasteUpdateValidate.class
+    })
     private String passwd;
 
-    @NotBlank
+    @NotBlank(groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class
+    })
+    @Size(min = 1, max = 5000, groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class,
+            PasteUpdateValidate.class
+    })
     private String paste;
+
+    @NotBlank(groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class
+    })
+    @Size(min = 1, max = 15, groups = {
+            AnonymousPasteCreateValidate.class,
+            PasteCreateValidate.class,
+            PasteUpdateValidate.class
+    })
+    private String type;
 
     @Null
     @TableField(exist = false)
     private Boolean hasPasswd;
 
+    @JsonIgnore
     public boolean hasPasswd() {
-        this.hasPasswd = passwd != null;
-        return this.hasPasswd;
+        return this.hasPasswd = passwd != null;
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return this.title == null
+                && this.paste == null
+                && this.passwd == null
+                && this.expireDuration == null
+                && this.isPrivate == null
+                && this.type == null;
     }
 
 }

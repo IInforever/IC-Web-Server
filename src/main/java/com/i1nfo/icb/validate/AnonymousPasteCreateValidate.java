@@ -6,5 +6,5 @@ package com.i1nfo.icb.validate;
 
 import javax.validation.groups.Default;
 
-public interface AnonymousPasteValidate extends Default {
+public interface AnonymousPasteCreateValidate extends Default {
 }
