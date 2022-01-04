@@ -7,6 +7,7 @@ package com.i1nfo.icb.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.i1nfo.icb.mapper.PasteMapper;
 import com.i1nfo.icb.model.Paste;
@@ -44,6 +45,10 @@ public class PasteService extends ServiceImpl<PasteMapper, Paste> {
         return baseMapper.selectList(queryWrapper);
     }
 
+    public IPage<Paste> getALl(IPage<Paste> page) {
+        return baseMapper.selectPage(page, null);
+    }
+
     public int updateById(Long id, @NotNull Paste entity, Long uid) {
         if (entity.getExpireDuration() != null)
             entity.setExpireTime(new Date(System.currentTimeMillis() + entity.getExpireDuration() * 1000));
@@ -54,6 +59,30 @@ public class PasteService extends ServiceImpl<PasteMapper, Paste> {
                 .eq(Paste::getUid, uid)
                 .ge(Paste::getExpireTime, new Date());
         return baseMapper.update(entity, updateWrapper);
+    }
+
+    public boolean updateAll(Long id, @NotNull Paste entity, Long uid) {
+        entity.setExpireTime(new Date(System.currentTimeMillis() + entity.getExpireDuration() * 1000));
+        entity.setPasswd(SecurityUtils.calcMD5(entity.getPasswd()));
+        return lambdaUpdate()
+                .set(Paste::getTitle, entity.getTitle())
+                .set(Paste::getPaste, entity.getPaste())
+                .set(Paste::getPasswd, entity.getPasswd())
+                .set(Paste::getExpireTime, entity.getExpireTime())
+                .set(Paste::getIsPrivate, entity.getIsPrivate())
+                .set(Paste::getType, entity.getType())
+                .eq(Paste::getId, id)
+                .eq(Paste::getUid, uid)
+                .ge(Paste::getExpireTime, new Date())
+                .update();
+    }
+
+    public boolean removeById(Long id, Long uid) {
+        LambdaQueryWrapper<Paste> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(Paste::getId, id)
+                .eq(Paste::getUid, uid);
+        return baseMapper.delete(queryWrapper) != 0;
     }
 
     public int cleanUpExpiredPaste() {

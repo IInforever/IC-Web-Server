@@ -9,6 +9,7 @@ import com.i1nfo.icb.service.PasteService;
 import com.i1nfo.icb.utils.SecurityUtils;
 import com.i1nfo.icb.validate.AnonymousPasteCreateValidate;
 import com.i1nfo.icb.validate.PasteCreateValidate;
+import com.i1nfo.icb.validate.PasteUpdateAllValidate;
 import com.i1nfo.icb.validate.PasteUpdateValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/paste")
+@RequestMapping("/api/pastes")
 public class PasteController {
 
     private final PasteService pasteService;
@@ -62,7 +63,7 @@ public class PasteController {
      * Get current user's all pastes
      */
     @GetMapping
-    public ResponseEntity<Object> getPaste(@RequestAttribute Long userID) {
+    public ResponseEntity<Object> getPastes(@RequestAttribute Long userID) {
         List<Paste> pastes = pasteService.getByUid(userID);
         if (pastes == null)
             return ResponseEntity.notFound().build();
@@ -110,11 +111,22 @@ public class PasteController {
         return ResponseEntity.notFound().build();
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Object> updatePaste(@PathVariable Long id,
-//                                              @RequestAttribute Long userID,
-//                                              @RequestBody @Validated(PasteUpdateAllValidate.class) Paste paste) {
-//        return ResponseEntity.ok().build();
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updatePaste(@PathVariable Long id,
+                                              @RequestAttribute Long userID,
+                                              @RequestBody @Validated(PasteUpdateAllValidate.class) Paste paste) {
+        if (pasteService.updateAll(id, paste, userID))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> removePaste(@PathVariable Long id,
+                                              @RequestAttribute Long userID) {
+        if (pasteService.removeById(id, userID))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
+    }
+
 
 }

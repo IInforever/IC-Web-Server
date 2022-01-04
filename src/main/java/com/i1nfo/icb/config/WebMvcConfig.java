@@ -40,10 +40,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         // paste api auth check interceptor
         registry.addInterceptor(pasteInterceptor)
-                .addPathPatterns("/api/paste/**");
+                .addPathPatterns("/api/pastes/**");
 
         // administrator auth interceptor
         registry.addInterceptor(adminAuthInterceptor)
-                .addPathPatterns("/api/users/**");
+                .addPathPatterns("/api/admin/users/**")
+                .addPathPatterns("/api/admin/pastes/**");
     }
 }
