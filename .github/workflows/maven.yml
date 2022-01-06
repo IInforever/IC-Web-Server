@@ -27,7 +27,7 @@ jobs:
         run: chmod +x ./keygen.sh && ./keygen.sh
 
       - name: create test applicaion configuration file
-        run: mv applicaion.example.yaml applicaion.yaml
+        run: mv application.example.yaml applicaion.yaml
 
       - name: Build with Maven
         run: mvn package
