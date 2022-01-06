@@ -13,6 +13,7 @@ jwt:
   update-time: 7200 # delta time from update time to expire time
 
 icb:
+  hostname: localhost
   admin:
     username: root
     password: password
