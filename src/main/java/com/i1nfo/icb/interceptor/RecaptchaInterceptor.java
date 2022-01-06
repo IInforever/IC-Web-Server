@@ -12,6 +12,7 @@ import com.i1nfo.icb.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -74,6 +75,7 @@ public class RecaptchaInterceptor implements HandlerInterceptor {
 
     private void returnBadGatewayResponse(@NotNull HttpServletResponse response) throws IOException {
         response.setStatus(HttpStatus.BAD_GATEWAY.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse
                 .builder()
                 .code(52)
@@ -83,6 +85,7 @@ public class RecaptchaInterceptor implements HandlerInterceptor {
 
     private void returnBadRequestResponse(@NotNull HttpServletResponse response, int code, String msg, Object error) throws IOException {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse
                 .builder()
                 .code(code)

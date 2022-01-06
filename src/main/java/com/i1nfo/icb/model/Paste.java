@@ -32,7 +32,7 @@ public class Paste {
     @Null
     private Long uid;
 
-    @Size(min = 1, max = 15, groups = {
+    @Size(min = 1, max = 20, groups = {
             AnonymousPasteCreateValidate.class,
             PasteCreateValidate.class,
             PasteUpdateValidate.class
@@ -63,7 +63,7 @@ public class Paste {
     @Null
     private Date createTime;
 
-    @Size(min = 1, max = 30, groups = {
+    @Size(min = 4, max = 32, groups = {
             AnonymousPasteCreateValidate.class,
             PasteCreateValidate.class,
             PasteUpdateValidate.class
