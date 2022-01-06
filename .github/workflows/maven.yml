@@ -15,24 +15,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'adopt'
-        cache: maven
-    - name: Generate ECC key
-      run: chmod +x ./keygen.sh && ./keygen.sh
-    
-    - name: Build with Maven
-      run: mvn package
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.3.1
-      with:
-        # Artifact name
-        name: artifact
-        # A file, directory or wildcard pattern that describes what to upload
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: Generate ECC key
+        run: chmod +x ./keygen.sh && ./keygen.sh
+
+      - name: create test applicaion configuration file
+        run: mv applicaion.example.yaml applicaion.yaml
+
+      - name: Build with Maven
+        run: mvn package
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          # Artifact name
+          name: artifact
+          # A file, directory or wildcard pattern that describes what to upload
         path: target/*.jar
         # The desired behavior if no files are found using the provided path.
 

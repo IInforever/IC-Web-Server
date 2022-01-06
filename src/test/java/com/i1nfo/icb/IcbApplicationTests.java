@@ -12,13 +12,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.event.annotation.AfterTestMethod;
 
 import java.util.Date;
 
 @SpringBootTest
-@ActiveProfiles("dev")
 class IcbApplicationTests {
 
     @Autowired

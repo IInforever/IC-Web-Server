@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: info
+    password: password
+    url: jdbc:mariadb://localhost:3306/icb
+
+jwt:
+  issuer: "i1nfo"
+  public-key-path: ecc-public-key.pem
+  private-key-path: ecc-private-key.pem
+  expires-time: 21600 # unit: second
+  update-time: 7200 # delta time from update time to expire time
+
+icb:
+  admin:
+    username: root
+    password: password
+  recaptcha:
+    hostname: recaptcha.net
+    secret: recaptcha-server-secret
