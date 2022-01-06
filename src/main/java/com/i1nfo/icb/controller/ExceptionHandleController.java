@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.controller;
@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -97,6 +98,18 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
                             .msg("invalid")
                             .error(exception.getMessage())
                             .build());
+    }
+
+    @ExceptionHandler(ResourceAccessException.class)
+    public ResponseEntity<ErrorResponse> handleResourceAccessException(@NotNull ResourceAccessException exception) {
+        return ResponseEntity
+                .internalServerError()
+                .body(ErrorResponse
+                        .builder()
+                        .code(51)
+                        .msg("recaptcha request error")
+                        .error(exception.getMessage())
+                        .build());
     }
 
 }

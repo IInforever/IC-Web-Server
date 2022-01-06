@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IInfo 2021.
+ * Copyright (c) IInfo 2022.
  */
 
 package com.i1nfo.icb.response;
@@ -12,7 +12,10 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class ErrorResponse {
-    String msg;
+
     Integer code;
+
+    String msg;
+
     Object error;
 }

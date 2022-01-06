@@ -7,6 +7,7 @@ package com.i1nfo.icb.config;
 import com.i1nfo.icb.interceptor.AdminAuthInterceptor;
 import com.i1nfo.icb.interceptor.AuthInterceptor;
 import com.i1nfo.icb.interceptor.PasteInterceptor;
+import com.i1nfo.icb.interceptor.RecaptchaInterceptor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +26,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final
     PasteInterceptor pasteInterceptor;
 
+    private final
+    RecaptchaInterceptor recaptchaInterceptor;
+
     @Autowired
-    public WebMvcConfig(AuthInterceptor authInterceptor, AdminAuthInterceptor adminAuthInterceptor, PasteInterceptor pasteInterceptor) {
+    public WebMvcConfig(AuthInterceptor authInterceptor, AdminAuthInterceptor adminAuthInterceptor, PasteInterceptor pasteInterceptor, RecaptchaInterceptor recaptchaInterceptor) {
         this.authInterceptor = authInterceptor;
         this.adminAuthInterceptor = adminAuthInterceptor;
         this.pasteInterceptor = pasteInterceptor;
+        this.recaptchaInterceptor = recaptchaInterceptor;
     }
 
     @Override
@@ -37,6 +42,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // general user auth interceptor
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/api/user");
+
+        // validate recaptcha response
+        registry.addInterceptor(recaptchaInterceptor)
+                .addPathPatterns("/api/pastes/anonymous")
+                .addPathPatterns("/api/login")
+                .addPathPatterns("/api/register");
 
         // paste api auth check interceptor
         registry.addInterceptor(pasteInterceptor)

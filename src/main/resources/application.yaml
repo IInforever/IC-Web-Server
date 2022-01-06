@@ -21,3 +21,6 @@ jwt:
   expires-time: 21600 # unit: second
   update-time: 7200 # delta time from update time to expire time
 
+icb:
+  recaptcha:
+    hostname: recaptcha.net

@@ -7,14 +7,5 @@ spring:
   devtools:
     add-properties: true
 
-jwt:
-  issuer: "i1nfo"
-  public-key-path: ecc-public-key.pem
-  private-key-path: ecc-private-key.pem
-  expires-time: 1800
-  update-time: 900
-
 icb:
-  admin:
-    username: root
-    password: password
+  hostname: localhost
