@@ -22,7 +22,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return save(user);
     }
 
-    public Long getIDByNameAndPasswd(String name, String pass) {
+    public Long getIdByNameAndPasswd(String name, String pass) {
         HashMap<SFunction<User, ?>, Object> params = new HashMap<>();
         params.put(User::getName, name);
         params.put(User::getPasswd, SecurityUtils.calcMD5(pass));
@@ -43,12 +43,19 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             log.warn(String.format("Update user %d last login time fail", id));
     }
 
-    public User getBasicInfoByID(Long id) {
+    public User getBasicInfoById(Long id) {
         return lambdaQuery()
                 .select(User::getId,
                         User::getName,
                         User::getEmail,
                         User::getCreateTime)
+                .eq(User::getId, id)
+                .one();
+    }
+
+    public User getNameById(Long id) {
+        return lambdaQuery()
+                .select(User::getName)
                 .eq(User::getId, id)
                 .one();
     }

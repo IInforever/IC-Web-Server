@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -24,11 +27,21 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Object> getUser(@RequestAttribute @NotNull Long userID) {
-        User user = userService.getBasicInfoByID(userID);
+        User user = userService.getBasicInfoById(userID);
         if (user != null)
             return ResponseEntity.ok(user);
         else
             return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getUserNameById(@PathVariable Long id) {
+        User user = userService.getNameById(id);
+        if (user == null)
+            return ResponseEntity.notFound().build();
+        Map<String, String> map = new HashMap<>();
+        map.put("name", user.getName());
+        return ResponseEntity.ok(map);
     }
 
     @PatchMapping

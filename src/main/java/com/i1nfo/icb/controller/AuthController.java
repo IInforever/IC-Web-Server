@@ -37,7 +37,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Validated(UserLoginValidate.class) @NotNull User user) {
-        Long id = userService.getIDByNameAndPasswd(user.getName(), user.getPasswd());
+        Long id = userService.getIdByNameAndPasswd(user.getName(), user.getPasswd());
         if (id == null)
             return ResponseEntity.notFound().build();
         userService.updateLoginTime(id);
