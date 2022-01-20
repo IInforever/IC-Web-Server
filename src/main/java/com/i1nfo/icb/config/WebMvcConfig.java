@@ -47,6 +47,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(recaptchaInterceptor)
                 .addPathPatterns("/api/pastes/anonymous")
                 .addPathPatterns("/api/login")
+                .addPathPatterns("/api/admin/login")
                 .addPathPatterns("/api/register");
 
         // paste api auth check interceptor

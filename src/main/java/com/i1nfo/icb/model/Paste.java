@@ -79,7 +79,7 @@ public class Paste {
             PasteCreateValidate.class,
             PasteUpdateValidate.class
     })
-    private String paste;
+    private String content;
 
     @NotBlank(groups = {
             AnonymousPasteCreateValidate.class,
@@ -104,7 +104,7 @@ public class Paste {
     @JsonIgnore
     public boolean isEmpty() {
         return this.title == null
-                && this.paste == null
+                && this.content == null
                 && this.passwd == null
                 && this.expireDuration == null
                 && this.isPrivate == null

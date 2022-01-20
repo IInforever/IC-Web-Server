@@ -32,7 +32,6 @@ public class PasteService extends ServiceImpl<PasteMapper, Paste> {
         queryWrapper.select(
                 "id",
                 "title",
-                "paste",
                 "is_private",
                 "expire_time",
                 "create_time",
@@ -66,7 +65,7 @@ public class PasteService extends ServiceImpl<PasteMapper, Paste> {
         entity.setPasswd(SecurityUtils.calcMD5(entity.getPasswd()));
         return lambdaUpdate()
                 .set(Paste::getTitle, entity.getTitle())
-                .set(Paste::getPaste, entity.getPaste())
+                .set(Paste::getContent, entity.getContent())
                 .set(Paste::getPasswd, entity.getPasswd())
                 .set(Paste::getExpireTime, entity.getExpireTime())
                 .set(Paste::getIsPrivate, entity.getIsPrivate())
