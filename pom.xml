@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) IInfo 2021.
+  ~ Copyright (c) IInfo 2022.
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -12,11 +12,11 @@
         <version>2.6.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.i1nfo</groupId>
-    <artifactId>icb</artifactId>
+    <groupId>com.i1nfo.ic</groupId>
+    <artifactId>ic-web-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>icb</name>
-    <description>icb web server</description>
+    <name>ICWebServer</name>
+    <description>IC web server</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>3.18.2</version>
+            <version>3.18.3</version>
         </dependency>
 
         <dependency>
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.3.4</version>
+            <version>3.5.1</version>
         </dependency>
 
         <dependency>
