@@ -11,10 +11,11 @@ create table if not exists pastes
     is_private  tinyint(1) default 0                   not null,
     expire_time timestamp  default current_timestamp() not null,
     passwd      char(32)                               null,
-    paste       text                                   not null,
+    content     text                                   not null,
     create_time timestamp  default current_timestamp() not null,
     type        varchar(15)                            not null
-);
+)
+    engine = InnoDB;
 
 create index if not exists pastes_expire_time_index
     on pastes (expire_time);

@@ -15,5 +15,6 @@ create table if not exists users
         unique (email),
     constraint users_name_uindex
         unique (name)
-);
+)
+    engine = InnoDB;
 
