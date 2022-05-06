@@ -1,0 +1,42 @@
+# Auto build package and create release when pushed a new tag
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  pack:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+
+      # Java tests
+      - name: Generate ECC key
+        run: chmod +x ./keygen.sh && ./keygen.sh
+
+      - name: create test application configuration file
+        run: mv application.example.yaml application.yaml
+
+      # Build package
+      - name: Build with Maven
+        run: mvn package
+
+      - name: Publish release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            LICENSE
+            target/*.jar
