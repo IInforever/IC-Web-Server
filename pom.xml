@@ -14,7 +14,7 @@
     </parent>
     <groupId>com.i1nfo.ic</groupId>
     <artifactId>ic-web-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>ICWebServer</name>
     <description>IC web server</description>
     <properties>
